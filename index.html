@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legyen Ön is Milliomos</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #1f1f1f, #3a3a3a);
+            color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #2d2d2d;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #1e90ff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .status {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        .question {
+            font-size: 1.3rem;
+            margin: 20px 0;
+            color: #f5f5f5;
+        }
+        .answers button {
+            display: block;
+            margin: 10px auto;
+            padding: 12px 20px;
+            font-size: 1rem;
+            background: #1e90ff;
+            color: #f5f5f5;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 80%;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .answers button:hover {
+            background: #0d7bcc;
+            transform: scale(1.05);
+        }
+        .sgomb button {
+            margin: 10px 5px;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            background: #444;
+            color: #f5f5f5;
+            border: 1px solid #555;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .sgomb button:hover {
+            background: #555;
+        }
+        .result, .nyeremeny {
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+        .restart button {
+            background: #ff5f5f;
+            color: #f5f5f5;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .restart button:hover {
+            background: #ff4242;
+            transform: scale(1.05);
+        }
+        .restart {
+    display: none;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Legyen Ön is Milliomos</h1>
+        <div class="status" id="jatekStatusz">Kérdés: 1 | Nyeremény: 5000 Ft</div>
+        <div class="question" id="kerdes">Kérdés: Melyik évben halt ki az Árpád-ház?</div>
+        <div class="answers">
+            <button id="valaszA" onclick="valaszEllenorzes('A')">A) 1301</button>
+            <button id="valaszB" onclick="valaszEllenorzes('B')">B) 1302</button>
+            <button id="valaszC" onclick="valaszEllenorzes('C')">C) kr.e.95</button>
+            <button id="valaszD" onclick="valaszEllenorzes('D')">D) 1456</button>
+        </div>
+        <div class="sgomb">
+            <button id="kozonseg" onclick="kozonsegSegitsege()">Közönség segítsége</button>
+            <button id="telefon" onclick="telefonSegitsege()">Telefonálás</button>
+            <button id="otven" onclick="otvenOtven()">50-50</button>
+        </div>
+        <div class="result" id="eredmeny"></div>
+        <div class="nyeremeny" id="pontszam"></div>
+        <div class="restart" id="ujrainditasDiv">
+            <button onclick="ujrainditas()">Újraindítás</button>
+        </div>
+    </div>
+
+    <script>
+        const kerdesek = [
+            { kerdes: "Melyik évben halt ki az Árpád-ház?", valaszok: ["1301", "1302", "kr.e.95", "1456"], helyesValasz: "A", nyeremeny: 5000 },
+            { kerdes: "Ki írta a Mama című verset?", valaszok: ["Petőfi Sándor", "Kosztolányi Dezső", "József Attila", "Kürti László"], helyesValasz: "C", nyeremeny: 15000 },
+            { kerdes: "Mennyi a 12.b osztály átlaga Webprogramozásból?", valaszok: ["5,00", "3,2", "4,78", "4,56"], helyesValasz: "C", nyeremeny: 30000 },
+            { kerdes: "Melyik állat tartozik a rágcsálók közé?", valaszok: ["Kajmán", "Kolibri", "Kenguru", "Capybara"], helyesValasz: "D", nyeremeny: 50000 },
+            { kerdes: "Hol írta híres leveleit Mikes Kelemen??", valaszok: ["Törökország", "Ausztri", "Kína", "Magyarország"], helyesValasz: "A", nyeremeny: 100000 },
+            { kerdes: "Melyik virágból származik az ópium?", valaszok: ["Csipkebogyó", "Mákvirág", "Zsálya", "Gyömbér"], helyesValasz: "B", nyeremeny: 200000 },
+            { kerdes: "Melyik évben halt meg Leonardo Da Vinci?", valaszok: ["1510", "1499", "1519", "1520"], helyesValasz: "C", nyeremeny: 300000 },
+            { kerdes: "Mi a legnagyobb emberi szerv?", valaszok: ["Gerincoszlop", "Gyomor", "Vastag bél", "Bőr"], helyesValasz: "D", nyeremeny: 500000 },
+            { kerdes: "Mleyik évben került hatalomra II. András?", valaszok: ["1205", "1214", "1220", "1222"], helyesValasz: "A", nyeremeny: 800000 },
+            { kerdes: "Kit hívtak a legnagyobb magyarnak?", valaszok: ["Kossuth Lajos", "Széchényi István", "Gyurcsány Ferenc", "Hunyadi János"], helyesValasz: "B", nyeremeny: 1500000 },
+            { kerdes: "Ki volt az Egyesült Államok 39. elnöke?", valaszok: ["Barack Obama", "Geoge W. bush", "Jimmy Carter", "Bill Clinton"], helyesValasz: "C", nyeremeny: 3000000 },
+            { kerdes: "Mikor adták át az első magyarországi vasútvonalat?", valaszok: ["1856", "1846", "1910", "1870"], helyesValasz: "B", nyeremeny: 5000000 },
+            { kerdes: "Ezek közül az országok közül melyik országnak a zsászlója áll csak két színből?", valaszok: ["USA", "Románia", "Japán", "Portugália"], helyesValasz: "C", nyeremeny: 10000000 },
+            { kerdes: "Mit jelent magyarul a latin 'cordis' szó?", valaszok: ["Vese", "Szív", "Térdkalács", "Fogíny"], helyesValasz: "B", nyeremeny: 20000000 },
+            { kerdes: "Ha a mosómedve alszik akor mi kormos?", valaszok: ["Miután felkelt", "Álmában", "Mielőtt lefekszik", "Kémény"], helyesValasz: "D", nyeremeny: 40000000 }
+        ];
+
+        let aktualisKerdesIndex = 0;
+        let osszPontszam = 0;
+        let hasznaltKozonsegSegitseg = false;
+        let hasznaltTelefonSegitseg = false;
+        let hasznaltOtvenOtven = false;
+
+        function kerdesBetoltese() {
+            const kerdes = kerdesek[aktualisKerdesIndex];
+            document.getElementById("kerdes").innerText = `Kérdés: ${kerdes.kerdes}`;
+            document.getElementById("jatekStatusz").innerText = `Kérdés: ${aktualisKerdesIndex + 1} | Nyeremény: ${kerdes.nyeremeny.toLocaleString()} Ft`;
+            const gombok = document.querySelectorAll('.answers button');
+            for (let i = 0; i < gombok.length; i++) {
+                gombok[i].innerText = `${String.fromCharCode(65 + i)}) ${kerdes.valaszok[i]}`;
+                gombok[i].style.display = "block";
+                gombok[i].disabled = false;
+            }
+            document.getElementById("eredmeny").innerText = "";
+        }
+
+        function valaszEllenorzes(kivalasztottValasz) {
+    const kerdes = kerdesek[aktualisKerdesIndex];
+    if (kivalasztottValasz === kerdes.helyesValasz) {
+        osszPontszam += kerdes.nyeremeny;
+        document.getElementById("eredmeny").innerText = "Helyes válasz!";
+    } else {
+        document.getElementById("eredmeny").innerText = "Hibás válasz! Nem nyertél semmit!";
+        document.getElementById("pontszam").innerText = "";
+        segitsegekTiltasa();
+        document.getElementById("ujrainditasDiv").style.display = "block";
+        return jatekVege();
+    }
+
+    aktualisKerdesIndex++;
+    if (aktualisKerdesIndex < kerdesek.length) {
+        setTimeout(() => {
+            kerdesBetoltese();
+            document.getElementById("pontszam").innerText = `Nyert összeg: ${osszPontszam.toLocaleString()} Ft`;
+        }, 2000);
+    } else {
+        document.getElementById("eredmeny").innerText = `Ön nyert!  A nyert összeg: ${osszPontszam.toLocaleString()} Ft`;
+        document.getElementById("pontszam").innerText = "";
+    }
+}
+
+
+        function segitsegekTiltasa() {
+            document.getElementById("kozonseg").disabled = true;
+            document.getElementById("telefon").disabled = true;
+            document.getElementById("otven").disabled = true;
+            document.getElementById("ujrainditasDiv").style.display = "block";
+        }
+
+        function otvenOtven() {
+            if (hasznaltOtvenOtven) {
+                alert("Ez a segítség már fel van használva!");
+                return;
+            }
+            hasznaltOtvenOtven = true;
+            document.getElementById("otven").disabled = true;
+            const kerdes = kerdesek[aktualisKerdesIndex];
+            const helytelenValaszok = ["A", "B", "C", "D"].filter(valasz => valasz !== kerdes.helyesValasz);
+            const eltavolitandoValaszok = helytelenValaszok.slice(0, 2);
+
+            eltavolitandoValaszok.forEach(valasz => {
+                document.getElementById(`valasz${valasz}`).style.display = "none";
+            });
+        }
+
+        function kozonsegSegitsege() {
+            if (hasznaltKozonsegSegitseg) {
+                alert("Ez a segítség már fel van használva!");
+                return;
+            }
+            hasznaltKozonsegSegitseg = true;
+            const kerdes = kerdesek[aktualisKerdesIndex];
+            alert(`A közönség szerint a helyes válasz: ${kerdes.helyesValasz}`);
+        }
+
+        function telefonSegitsege() {
+            if (hasznaltTelefonSegitseg) {
+                alert("Ez a segítség már fel van használva!");
+                return;
+            }
+            hasznaltTelefonSegitseg = true;
+            const kerdes = kerdesek[aktualisKerdesIndex];
+            alert(`A barát szerint a helyes válasz: ${kerdes.helyesValasz}`);
+        }
+
+        function jatekVege() {
+            document.querySelectorAll('.answers button').forEach(gomb => {
+                gomb.disabled = true;
+            });
+        }
+
+        function ujrainditas() {
+            location.reload();
+        }
+
+        kerdesBetoltese();
+    </script>
+</body>
+</html>
