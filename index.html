@@ -124,8 +124,8 @@
             { kerdes: "Ki írta a Mama című verset?", valaszok: ["Petőfi Sándor", "Kosztolányi Dezső", "József Attila", "Kürti László"], helyesValasz: "C", nyeremeny: 15000 },
             { kerdes: "Mennyi a 12.b osztály átlaga Webprogramozásból?", valaszok: ["5,00", "3,2", "4,78", "4,56"], helyesValasz: "C", nyeremeny: 30000 },
             { kerdes: "Melyik állat tartozik a rágcsálók közé?", valaszok: ["Kajmán", "Kolibri", "Kenguru", "Capybara"], helyesValasz: "D", nyeremeny: 50000 },
-            { kerdes: "Hol írta híres leveleit Mikes Kelemen??", valaszok: ["Törökország", "Ausztri", "Kína", "Magyarország"], helyesValasz: "A", nyeremeny: 100000 },
-            { kerdes: "Melyik virágból származik az ópium?", valaszok: ["Csipkebogyó", "Mákvirág", "Zsálya", "Gyömbér"], helyesValasz: "B", nyeremeny: 200000 },
+            { kerdes: "Hol írta híres leveleit Mikes Kelemen??", valaszok: ["Törökország", "Ausztria", "Kína", "Magyarország"], helyesValasz: "A", nyeremeny: 100000 },
+            { kerdes: "Melyik növényből származik az ópium?", valaszok: ["Csipkebogyó", "Mákvirág", "Zsálya", "Gyömbér"], helyesValasz: "B", nyeremeny: 200000 },
             { kerdes: "Melyik évben halt meg Leonardo Da Vinci?", valaszok: ["1510", "1499", "1519", "1520"], helyesValasz: "C", nyeremeny: 300000 },
             { kerdes: "Mi a legnagyobb emberi szerv?", valaszok: ["Gerincoszlop", "Gyomor", "Vastag bél", "Bőr"], helyesValasz: "D", nyeremeny: 500000 },
             { kerdes: "Mleyik évben került hatalomra II. András?", valaszok: ["1205", "1214", "1220", "1222"], helyesValasz: "A", nyeremeny: 800000 },
@@ -160,9 +160,9 @@
     const kerdes = kerdesek[aktualisKerdesIndex];
     if (kivalasztottValasz === kerdes.helyesValasz) {
         osszPontszam += kerdes.nyeremeny;
-        document.getElementById("eredmeny").innerText = "Helyes válasz!";
+        document.getElementById("eredmeny").innerText = "A válasz helyes!";
     } else {
-        document.getElementById("eredmeny").innerText = "Hibás válasz! Nem nyertél semmit!";
+        document.getElementById("eredmeny").innerText = "A válasz helytelen! Nem nyertél semmit!";
         document.getElementById("pontszam").innerText = "";
         segitsegekTiltasa();
         document.getElementById("ujrainditasDiv").style.display = "block";
@@ -176,7 +176,7 @@
             document.getElementById("pontszam").innerText = `Nyert összeg: ${osszPontszam.toLocaleString()} Ft`;
         }, 2000);
     } else {
-        document.getElementById("eredmeny").innerText = `Ön nyert!  A nyert összeg: ${osszPontszam.toLocaleString()} Ft`;
+        document.getElementById("eredmeny").innerText = `Ön nyert!  A nyeremény összege: ${osszPontszam.toLocaleString()} Ft`;
         document.getElementById("pontszam").innerText = "";
     }
 }
