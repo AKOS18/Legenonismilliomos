@@ -25,6 +25,7 @@
             max-width: 600px;
             width: 90%;
         }
+        
         h1 {
             font-size: 2rem;
             color: #1e90ff;
@@ -124,8 +125,8 @@
             { kerdes: "Ki írta a Mama című verset?", valaszok: ["Petőfi Sándor", "Kosztolányi Dezső", "József Attila", "Kürti László"], helyesValasz: "C", nyeremeny: 15000 },
             { kerdes: "Mennyi a 12.b osztály átlaga Webprogramozásból?", valaszok: ["5,00", "3,2", "4,78", "4,56"], helyesValasz: "C", nyeremeny: 30000 },
             { kerdes: "Melyik állat tartozik a rágcsálók közé?", valaszok: ["Kajmán", "Kolibri", "Kenguru", "Capybara"], helyesValasz: "D", nyeremeny: 50000 },
-            { kerdes: "Hol írta híres leveleit Mikes Kelemen??", valaszok: ["Törökország", "Ausztria", "Kína", "Magyarország"], helyesValasz: "A", nyeremeny: 100000 },
-            { kerdes: "Melyik növényből származik az ópium?", valaszok: ["Csipkebogyó", "Mákvirág", "Zsálya", "Gyömbér"], helyesValasz: "B", nyeremeny: 200000 },
+            { kerdes: "Hol írta híres leveleit Mikes Kelemen??", valaszok: ["Törökország", "Ausztri", "Kína", "Magyarország"], helyesValasz: "A", nyeremeny: 100000 },
+            { kerdes: "Melyik virágból származik az ópium?", valaszok: ["Csipkebogyó", "Mákvirág", "Zsálya", "Gyömbér"], helyesValasz: "B", nyeremeny: 200000 },
             { kerdes: "Melyik évben halt meg Leonardo Da Vinci?", valaszok: ["1510", "1499", "1519", "1520"], helyesValasz: "C", nyeremeny: 300000 },
             { kerdes: "Mi a legnagyobb emberi szerv?", valaszok: ["Gerincoszlop", "Gyomor", "Vastag bél", "Bőr"], helyesValasz: "D", nyeremeny: 500000 },
             { kerdes: "Mleyik évben került hatalomra II. András?", valaszok: ["1205", "1214", "1220", "1222"], helyesValasz: "A", nyeremeny: 800000 },
@@ -158,10 +159,17 @@
 
         function valaszEllenorzes(kivalasztottValasz) {
     const kerdes = kerdesek[aktualisKerdesIndex];
+    const gombok = document.querySelectorAll('.answers button');
+
+    gombok.forEach(gomb => gomb.disabled = true);
+
     if (kivalasztottValasz === kerdes.helyesValasz) {
+        document.getElementById(`valasz${kivalasztottValasz}`).style.background = "green";
         osszPontszam += kerdes.nyeremeny;
         document.getElementById("eredmeny").innerText = "A válasz helyes!";
     } else {
+        document.getElementById(`valasz${kivalasztottValasz}`).style.background = "red";
+        document.getElementById(`valasz${kerdes.helyesValasz}`).style.background = "green"
         document.getElementById("eredmeny").innerText = "A válasz helytelen! Nem nyertél semmit!";
         document.getElementById("pontszam").innerText = "";
         segitsegekTiltasa();
@@ -174,12 +182,14 @@
         setTimeout(() => {
             kerdesBetoltese();
             document.getElementById("pontszam").innerText = `Nyert összeg: ${osszPontszam.toLocaleString()} Ft`;
+            gombok.forEach(gomb => gomb.style.background = "#1e90ff");
         }, 2000);
     } else {
-        document.getElementById("eredmeny").innerText = `Ön nyert!  A nyeremény összege: ${osszPontszam.toLocaleString()} Ft`;
+        document.getElementById("eredmeny").innerText = `Gratulálok ön nyert!  A nyert összeg: ${osszPontszam.toLocaleString()} Ft`;
         document.getElementById("pontszam").innerText = "";
     }
 }
+
 
 
         function segitsegekTiltasa() {
@@ -195,6 +205,11 @@
                 return;
             }
             hasznaltOtvenOtven = true;
+        document.getElementById("otven").disabled = true;
+        document.getElementById("otven").style.textDecoration = "line-through";
+        document.getElementById("otven").style.color = "red";
+
+            hasznaltOtvenOtven = true;
             document.getElementById("otven").disabled = true;
             const kerdes = kerdesek[aktualisKerdesIndex];
             const helytelenValaszok = ["A", "B", "C", "D"].filter(valasz => valasz !== kerdes.helyesValasz);
@@ -209,7 +224,13 @@
             if (hasznaltKozonsegSegitseg) {
                 alert("Ez a segítség már fel van használva!");
                 return;
+                
             }
+            hasznaltKozonsegSegitseg = true;
+        document.getElementById("kozonseg").disabled = true;
+        document.getElementById("kozonseg").style.textDecoration = "line-through";
+        document.getElementById("kozonseg").style.color = "red";
+    
             hasznaltKozonsegSegitseg = true;
             const kerdes = kerdesek[aktualisKerdesIndex];
             alert(`A közönség szerint a helyes válasz: ${kerdes.helyesValasz}`);
@@ -220,6 +241,11 @@
                 alert("Ez a segítség már fel van használva!");
                 return;
             }
+            hasznaltTelefonSegitseg = true;
+        document.getElementById("telefon").disabled = true;
+        document.getElementById("telefon").style.textDecoration = "line-through";
+        document.getElementById("telefon").style.color = "red";
+  
             hasznaltTelefonSegitseg = true;
             const kerdes = kerdesek[aktualisKerdesIndex];
             alert(`A barát szerint a helyes válasz: ${kerdes.helyesValasz}`);
@@ -236,6 +262,7 @@
         }
 
         kerdesBetoltese();
+        
     </script>
 </body>
 </html>
