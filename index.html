@@ -1,142 +1,358 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Legyen Ön is Milliomos</title>
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            text-align: center;
-            background: linear-gradient(135deg, #1f1f1f, #3a3a3a);
-            color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+        :root{
+            --bg1: #0f1720;
+            --bg2: #1f2933;
+            --card: #22272b;
+            --accent: #1e90ff;
+            --gold: #ffd700;
+            --muted: #9aa4ad;
         }
-        .container {
-            background: #2d2d2d;
-            padding: 20px 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            width: 90%;
+        *{box-sizing:border-box}
+        body{
+            margin:0;
+            min-height:100vh;
+            font-family:Inter, Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg,var(--bg1),var(--bg2));
+            color:#eef2f6;
+            display:flex;
+            gap:24px;
+            padding:24px;
         }
-        
-        h1 {
-            font-size: 2rem;
-            color: #1e90ff;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+
+        /* SIDEBAR (nyeremeny-létra) */
+        .sidebar{
+            width:260px;
+            background: linear-gradient(180deg,#111417, #172026);
+            border-radius:12px;
+            padding:16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+            flex-shrink:0;
+            display:flex;
+            flex-direction:column;
+            align-items:stretch;
+            height:calc(100vh - 48px);
+            overflow:auto;
         }
-        .status {
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-            color: #ffd700;
+        .sidebar h2{
+            margin:0 0 12px 0;
+            font-size:16px;
+            color:var(--gold);
+            text-align:center;
+            letter-spacing:0.6px;
         }
-        .question {
-            font-size: 1.3rem;
-            margin: 20px 0;
-            color: #f5f5f5;
+        .prize-list{
+            list-style:none;
+            padding:0;
+            margin:0;
+            width:100%;
         }
-        .answers button {
-            display: block;
-            margin: 10px auto;
-            padding: 12px 20px;
-            font-size: 1rem;
-            background: #1e90ff;
-            color: #f5f5f5;
+        .prize-item{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:10px 12px;
+            border-radius:10px;
+            margin-bottom:8px;
+            background:transparent;
+            color:var(--muted);
+            font-weight:600;
+            transition: all 0.18s ease;
+            border:1px solid rgba(255,255,255,0.02);
+        }
+        .prize-item span.level{
+            font-size:13px;
+            color:#cbd5dd;
+        }
+        .prize-item span.amount{
+            font-size:14px;
+        }
+        .prize-item.active{
+            background: linear-gradient(90deg, rgba(255,215,0,0.12), rgba(30,144,255,0.06));
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(30,144,255,0.06);
+            transform: translateX(-4px);
+            border:1px solid rgba(30,144,255,0.18);
+        }
+        .prize-item.locked{
+            opacity:0.45;
+        }
+
+        /* MAIN */
+        .main{
+            flex:1 1 auto;
+            max-width:900px;
+            background: linear-gradient(180deg, #1c2226, #23292d);
+            border-radius:12px;
+            padding:22px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            display:flex;
+            flex-direction:column;
+            align-items:stretch;
+            gap:12px;
+        }
+        .header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+        }
+        h1{
+            margin:0;
+            font-size:20px;
+            color:var(--accent);
+            text-transform:uppercase;
+            letter-spacing:0.8px;
+        }
+        .status{
+            color:var(--gold);
+            font-weight:700;
+        }
+        .card{
+            background:var(--card);
+            border-radius:12px;
+            padding:18px;
+            box-shadow: inset 0 -2px 0 rgba(0,0,0,0.4);
+        }
+        .question{
+            font-size:18px;
+            margin:0 0 10px 0;
+            color:#eef6ff;
+            min-height:56px;
+            display:flex;
+            align-items:center;
+        }
+        .answers{
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+        }
+        .answers button{
+            background: linear-gradient(180deg,var(--accent), #0b6fd0);
+            color:white;
             border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 80%;
-            transition: background 0.3s ease, transform 0.2s ease;
+            padding:12px 14px;
+            border-radius:10px;
+            font-size:15px;
+            cursor:pointer;
+            text-align:left;
+            transition: transform .12s ease, filter .12s ease;
+            display:flex;
+            gap:12px;
+            align-items:center;
+            justify-content:flex-start;
         }
-        .answers button:hover {
-            background: #0d7bcc;
-            transform: scale(1.05);
+        .answers button:hover{ transform: translateY(-3px) }
+        .answers button.disabled{ opacity:0.55; cursor:not-allowed; transform:none }
+        .answers .label{
+            background:rgba(255,255,255,0.06);
+            padding:8px 10px;
+            border-radius:8px;
+            font-weight:800;
+            width:40px;
+            text-align:center;
         }
-        .sgomb button {
-            margin: 10px 5px;
-            padding: 10px 15px;
-            font-size: 0.9rem;
-            background: #444;
-            color: #f5f5f5;
-            border: 1px solid #555;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.3s ease;
+        .lifelines{
+            margin-top:12px;
+            display:flex;
+            gap:8px;
         }
-        .sgomb button:hover {
-            background: #555;
+        .lifelines button{
+            padding:8px 10px;
+            background:#2b3236;
+            color:#e6eef6;
+            border-radius:8px;
+            border:1px solid rgba(255,255,255,0.03);
+            cursor:pointer;
         }
-        .result, .nyeremeny {
-            margin-top: 20px;
-            font-size: 1.1rem;
+        .info-row{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            margin-top:12px;
         }
-        .restart button {
-            background: #ff5f5f;
-            color: #f5f5f5;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
+        .result{
+            font-weight:700;
+            min-height:22px;
+            color:#bfe3b9;
         }
-        .restart button:hover {
-            background: #ff4242;
-            transform: scale(1.05);
+        .restart{
+            display:none;
         }
-        .restart {
+        .restart button{
+            background:#ff5f5f;
+            color:white;
+            padding:8px 12px;
+            border-radius:8px;
+            border:none;
+            cursor:pointer;
+        }
+
+        @media (max-width:900px){
+            body{flex-direction:column;padding:12px}
+            .sidebar{width:100%;height: 40%;order:2}
+            .main{order:1;width:100%}
+        }
+        /* --- MODÁL ABLAK STÍLUS --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
     display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    animation: fadeIn 0.4s ease;
+}
+
+.modal {
+    background: #2b2b2b;
+    border: 2px solid #1e90ff;
+    border-radius: 15px;
+    padding: 25px 40px;
+    color: #f5f5f5;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.5);
+    animation: popUp 0.3s ease;
+}
+
+.modal h2 {
+    color: #ffd700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.modal p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+#continueBtn {
+    background: #1e90ff;
+    color: white;
+}
+
+#continueBtn:hover {
+    background: #0d7bcc;
+    transform: scale(1.05);
+}
+
+#stopBtn {
+    background: #ff5f5f;
+    color: white;
+}
+
+#stopBtn:hover {
+    background: #ff4242;
+    transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popUp {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Legyen Ön is Milliomos</h1>
-        <div class="status" id="jatekStatusz">Kérdés: 1 | Nyeremény: 5000 Ft</div>
-        <div class="question" id="kerdes">Kérdés: Melyik évben halt ki az Árpád-ház?</div>
-        <div class="answers">
-            <button id="valaszA" onclick="valaszEllenorzes('A')">A) 1301</button>
-            <button id="valaszB" onclick="valaszEllenorzes('B')">B) 1302</button>
-            <button id="valaszC" onclick="valaszEllenorzes('C')">C) kr.e.95</button>
-            <button id="valaszD" onclick="valaszEllenorzes('D')">D) 1456</button>
+    <aside class="sidebar" id="sidebar">
+        <h2>Nyeremények</h2>
+        <ul class="prize-list" id="prizeList"></ul>
+    </aside>
+
+    <main class="main">
+        <div class="header">
+            <h1>Legyen Ön is Milliomos</h1>
+            <div class="status" id="jatekStatusz">Kérdés: 1 | Nyeremény: 5 000 Ft</div>
         </div>
-        <div class="sgomb">
-            <button id="kozonseg" onclick="kozonsegSegitsege()">Közönség segítsége</button>
-            <button id="telefon" onclick="telefonSegitsege()">Telefonálás</button>
-            <button id="otven" onclick="otvenOtven()">50-50</button>
+
+        <div class="card">
+            <div class="question" id="kerdes">Kérdés betöltése...</div>
+
+            <div class="answers" id="answerButtons">
+                <button id="valaszA" onclick="valaszEllenorzes('A')"><div class="label">A</div><div class="text" id="textA">A)</div></button>
+                <button id="valaszB" onclick="valaszEllenorzes('B')"><div class="label">B</div><div class="text" id="textB">B)</div></button>
+                <button id="valaszC" onclick="valaszEllenorzes('C')"><div class="label">C</div><div class="text" id="textC">C)</div></button>
+                <button id="valaszD" onclick="valaszEllenorzes('D')"><div class="label">D</div><div class="text" id="textD">D)</div></button>
+            </div>
+
+            <div class="lifelines">
+                <button id="kozonseg" onclick="kozonsegSegitsege()">Közönség</button>
+                <button id="telefon" onclick="telefonSegitsege()">Telefon</button>
+                <button id="otven" onclick="otvenOtven()">50-50</button>
+            </div>
+
+            <div class="info-row">
+                <div class="result" id="eredmeny"></div>
+                <div class="nyeremeny" id="pontszam"></div>
+            </div>
+
+            <div class="restart" id="ujrainditasDiv">
+                <button onclick="ujrainditas()">Újraindítás</button>
+            </div>
         </div>
-        <div class="result" id="eredmeny"></div>
-        <div class="nyeremeny" id="pontszam"></div>
-        <div class="restart" id="ujrainditasDiv">
-            <button onclick="ujrainditas()">Újraindítás</button>
-        </div>
-    </div>
+
+    </main>
 
     <script>
         const kerdesek = [
-            { kerdes: "Melyik évben halt ki az Árpád-ház?", valaszok: ["1301", "1302", "kr.e.95", "1456"], helyesValasz: "A", nyeremeny: 5000 },
-            { kerdes: "Ki írta a Mama című verset?", valaszok: ["Petőfi Sándor", "Kosztolányi Dezső", "József Attila", "Kürti László"], helyesValasz: "C", nyeremeny: 15000 },
-            { kerdes: "Mennyi a 12.b osztály átlaga Webprogramozásból?", valaszok: ["5,00", "3,2", "4,78", "4,56"], helyesValasz: "C", nyeremeny: 30000 },
-            { kerdes: "Melyik állat tartozik a rágcsálók közé?", valaszok: ["Kajmán", "Kolibri", "Kenguru", "Capybara"], helyesValasz: "D", nyeremeny: 50000 },
-            { kerdes: "Hol írta híres leveleit Mikes Kelemen??", valaszok: ["Törökország", "Ausztri", "Kína", "Magyarország"], helyesValasz: "A", nyeremeny: 100000 },
-            { kerdes: "Melyik virágból származik az ópium?", valaszok: ["Csipkebogyó", "Mákvirág", "Zsálya", "Gyömbér"], helyesValasz: "B", nyeremeny: 200000 },
-            { kerdes: "Melyik évben halt meg Leonardo Da Vinci?", valaszok: ["1510", "1499", "1519", "1520"], helyesValasz: "C", nyeremeny: 300000 },
-            { kerdes: "Mi a legnagyobb emberi szerv?", valaszok: ["Gerincoszlop", "Gyomor", "Vastag bél", "Bőr"], helyesValasz: "D", nyeremeny: 500000 },
-            { kerdes: "Mleyik évben került hatalomra II. András?", valaszok: ["1205", "1214", "1220", "1222"], helyesValasz: "A", nyeremeny: 800000 },
-            { kerdes: "Kit hívtak a legnagyobb magyarnak?", valaszok: ["Kossuth Lajos", "Széchényi István", "Gyurcsány Ferenc", "Hunyadi János"], helyesValasz: "B", nyeremeny: 1500000 },
-            { kerdes: "Ki volt az Egyesült Államok 39. elnöke?", valaszok: ["Barack Obama", "Geoge W. bush", "Jimmy Carter", "Bill Clinton"], helyesValasz: "C", nyeremeny: 3000000 },
-            { kerdes: "Mikor adták át az első magyarországi vasútvonalat?", valaszok: ["1856", "1846", "1910", "1870"], helyesValasz: "B", nyeremeny: 5000000 },
-            { kerdes: "Ezek közül az országok közül melyik országnak a zsászlója áll csak két színből?", valaszok: ["USA", "Románia", "Japán", "Portugália"], helyesValasz: "C", nyeremeny: 10000000 },
-            { kerdes: "Mit jelent magyarul a latin 'cordis' szó?", valaszok: ["Vese", "Szív", "Térdkalács", "Fogíny"], helyesValasz: "B", nyeremeny: 20000000 },
-            { kerdes: "Ha a mosómedve alszik akor mi kormos?", valaszok: ["Miután felkelt", "Álmában", "Mielőtt lefekszik", "Kémény"], helyesValasz: "D", nyeremeny: 40000000 }
+            { kerdes: "Melyik évben halt ki az Árpád-ház?", valaszok: ["1301", "1302", "kr.e.95", "1456"], helyesValasz: "A" },
+            { kerdes: "Ki írta a Mama című verset?", valaszok: ["Petőfi Sándor", "Kosztolányi Dezső", "József Attila", "Kürti László"], helyesValasz: "C" },
+            { kerdes: "Mennyi a 12.b osztály átlaga Webprogramozásból?", valaszok: ["5,00", "3,2", "4,78", "4,56"], helyesValasz: "C" },
+            { kerdes: "Melyik állat tartozik a rágcsálók közé?", valaszok: ["Kajmán", "Kolibri", "Kenguru", "Capybara"], helyesValasz: "D" },
+            { kerdes: "Hol írta híres leveleit Mikes Kelemen?", valaszok: ["Törökország", "Ausztria", "Kína", "Magyarország"], helyesValasz: "A" },
+            { kerdes: "Melyik virágból származik az ópium?", valaszok: ["Csipkebogyó", "Mákvirág", "Zsálya", "Gyömbér"], helyesValasz: "B" },
+            { kerdes: "Melyik évben halt meg Leonardo Da Vinci?", valaszok: ["1510", "1499", "1519", "1520"], helyesValasz: "C" },
+            { kerdes: "Mi a legnagyobb emberi szerv?", valaszok: ["Gerincoszlop", "Gyomor", "Vastag bél", "Bőr"], helyesValasz: "D" },
+            { kerdes: "Melyik évben került hatalomra II. András?", valaszok: ["1205", "1214", "1220", "1222"], helyesValasz: "A" },
+            { kerdes: "Kit hívtak a legnagyobb magyarnak?", valaszok: ["Kossuth Lajos", "Széchényi István", "Gyurcsány Ferenc", "Hunyadi János"], helyesValasz: "B" },
+            { kerdes: "Ki volt az Egyesült Államok 39. elnöke?", valaszok: ["Barack Obama", "George W. Bush", "Jimmy Carter", "Bill Clinton"], helyesValasz: "C" },
+            { kerdes: "Mikor adták át az első magyarországi vasútvonalat?", valaszok: ["1856", "1846", "1910", "1870"], helyesValasz: "B" },
+            { kerdes: "Melyik országnak a zászlója áll csak két színből?", valaszok: ["USA", "Románia", "Japán", "Portugália"], helyesValasz: "C" },
+            { kerdes: "Mit jelent magyarul a latin 'cordis' szó?", valaszok: ["Vese", "Szív", "Térdkalács", "Fogíny"], helyesValasz: "B" },
+            { kerdes: "Ha a mosómedve alszik akkor mi kormos?", valaszok: ["Miután felkelt", "Álmában", "Mielőtt lefekszik", "Kémény"], helyesValasz: "D" }
         ];
+
+        const nyeremenyek = [
+            5000, 15000, 30000, 50000, 100000, 200000, 300000, 500000,
+            800000, 1500000, 3000000, 5000000, 10000000, 20000000, 40000000
+        ];
+
+        function kever(tomb){
+            for(let i=tomb.length-1;i>0;i--){
+                const j = Math.floor(Math.random()*(i+1));
+                [tomb[i], tomb[j]] = [tomb[j], tomb[i]];
+            }
+            return tomb;
+        }
+
+        const randomKerdesek = kever([...kerdesek]);
 
         let aktualisKerdesIndex = 0;
         let osszPontszam = 0;
@@ -144,125 +360,227 @@
         let hasznaltTelefonSegitseg = false;
         let hasznaltOtvenOtven = false;
 
-        function kerdesBetoltese() {
-            const kerdes = kerdesek[aktualisKerdesIndex];
-            document.getElementById("kerdes").innerText = `Kérdés: ${kerdes.kerdes}`;
-            document.getElementById("jatekStatusz").innerText = `Kérdés: ${aktualisKerdesIndex + 1} | Nyeremény: ${kerdes.nyeremeny.toLocaleString()} Ft`;
-            const gombok = document.querySelectorAll('.answers button');
-            for (let i = 0; i < gombok.length; i++) {
-                gombok[i].innerText = `${String.fromCharCode(65 + i)}) ${kerdes.valaszok[i]}`;
-                gombok[i].style.display = "block";
-                gombok[i].disabled = false;
+        const kerdesElem = document.getElementById("kerdes");
+        const jatekStatusz = document.getElementById("jatekStatusz");
+        const pontszamElem = document.getElementById("pontszam");
+        const eredmenyElem = document.getElementById("eredmeny");
+        const prizeListElem = document.getElementById("prizeList");
+
+        function buildPrizeList(){
+            prizeListElem.innerHTML = "";
+           
+            for(let i = nyeremenyek.length - 1; i >= 0; i--){
+                const li = document.createElement("li");
+                li.className = "prize-item locked";
+                li.dataset.index = i; 
+                li.innerHTML = `<span class="level">${i+1}.</span> <span class="amount">${nyeremenyek[i].toLocaleString()} Ft</span>`;
+                prizeListElem.appendChild(li);
             }
-            document.getElementById("eredmeny").innerText = "";
         }
 
-        function valaszEllenorzes(kivalasztottValasz) {
-    const kerdes = kerdesek[aktualisKerdesIndex];
-    const gombok = document.querySelectorAll('.answers button');
+ 
+        function updatePrizeHighlight(){
 
-    gombok.forEach(gomb => gomb.disabled = true);
+            const items = prizeListElem.querySelectorAll(".prize-item");
+            items.forEach(it => {
+                it.classList.remove("active");
+                it.classList.add("locked");
+            });
+
+            const active = prizeListElem.querySelector(`.prize-item[data-index="${aktualisKerdesIndex}"]`);
+            if(active){
+                active.classList.add("active");
+                active.classList.remove("locked");
+            }
+        }
+
+        function kerdesBetoltese(){
+            if(aktualisKerdesIndex >= randomKerdesek.length){
+                kerdesElem.innerText = "A játék véget ért — gratulálunk!";
+                jatekStatusz.innerText = `Kész — Összesen: ${osszPontszam.toLocaleString()} Ft`;
+                document.querySelectorAll('.answers button').forEach(b => b.disabled = true);
+                document.getElementById("ujrainditasDiv").style.display = "block";
+                updatePrizeHighlight();
+                return;
+            }
+
+            const kerdes = randomKerdesek[aktualisKerdesIndex];
+            const nyeremeny = nyeremenyek[aktualisKerdesIndex];
+
+            kerdesElem.innerText = `${kerdes.kerdes}`;
+            jatekStatusz.innerText = `Kérdés: ${aktualisKerdesIndex + 1} | Nyeremény: ${nyeremeny.toLocaleString()} Ft`;
+            eredmenyElem.innerText = "";
+            pontszamElem.innerText = `Összesen: ${osszPontszam ? osszPontszam.toLocaleString() + " Ft" : "-"}`;
+
+            const gombok = document.querySelectorAll('.answers button');
+            for(let i=0;i<gombok.length;i++){
+                gombok[i].style.display = "flex";
+                gombok[i].disabled = false;
+                gombok[i].classList.remove("disabled");
+                const txt = kerdes.valaszok[i] || "";
+                gombok[i].querySelector(".text").innerText = `${String.fromCharCode(65 + i)}) ${txt}`;
+                gombok[i].style.background = ""; 
+            }
+
+            updatePrizeHighlight();
+        }
+
+     function valaszEllenorzes(kivalasztottValasz) {
+    const kerdes = randomKerdesek[aktualisKerdesIndex];
+    const nyeremeny = nyeremenyek[aktualisKerdesIndex];
+    const gombok = document.querySelectorAll('.answers button');
+    const eredmenyElem = document.getElementById("eredmeny");
+
+
+
+    gombok.forEach(g => g.disabled = true);
 
     if (kivalasztottValasz === kerdes.helyesValasz) {
-        document.getElementById(`valasz${kivalasztottValasz}`).style.background = "green";
-        osszPontszam += kerdes.nyeremeny;
-        document.getElementById("eredmeny").innerText = "A válasz helyes!";
-    } else {
-        document.getElementById(`valasz${kivalasztottValasz}`).style.background = "red";
-        document.getElementById(`valasz${kerdes.helyesValasz}`).style.background = "green"
-        document.getElementById("eredmeny").innerText = "A válasz helytelen! Nem nyertél semmit!";
-        document.getElementById("pontszam").innerText = "";
-        segitsegekTiltasa();
-        document.getElementById("ujrainditasDiv").style.display = "block";
-        return jatekVege();
-    }
+ 
+        document.getElementById(`valasz${kivalasztottValasz}`).style.background =
+            "linear-gradient(90deg,#2bc36b,#129b4d)";
+        osszPontszam += nyeremeny;
+        eredmenyElem.style.color = "#bfe3b6";
+        eredmenyElem.innerText = `Helyes! Nyertél: ${nyeremeny.toLocaleString()} Ft`;
 
-    aktualisKerdesIndex++;
-    if (aktualisKerdesIndex < kerdesek.length) {
+        aktualisKerdesIndex++;
+
         setTimeout(() => {
-            kerdesBetoltese();
-            document.getElementById("pontszam").innerText = `Nyert összeg: ${osszPontszam.toLocaleString()} Ft`;
-            gombok.forEach(gomb => gomb.style.background = "#1e90ff");
-        }, 2000);
+       
+            if (aktualisKerdesIndex >= randomKerdesek.length) {
+                eredmenyElem.innerText =
+                    `Gratulálunk! Összesen nyertél: ${osszPontszam.toLocaleString()} Ft`;
+                document.getElementById("ujrainditasDiv").style.display = "block";
+                return;
+            }
+
+  
+            const modal = document.getElementById("modalOverlay");
+            const modalText = document.getElementById("modalText");
+            modalText.innerText =
+                `Eddigi nyereményed: ${osszPontszam.toLocaleString()} Ft\n\nSzeretnéd folytatni a játékot?`;
+            modal.style.display = "flex";
+
+            const continueBtn = document.getElementById("continueBtn");
+            const stopBtn = document.getElementById("stopBtn");
+
+            continueBtn.onclick = () => {
+                modal.style.display = "none";
+
+         
+                gombok.forEach(g => {
+                    g.style.background = "#1e90ff";
+                    g.style.display = "block";
+                    g.disabled = false;
+                });
+
+              
+                kerdesBetoltese();
+            };
+
+            stopBtn.onclick = () => {
+                modal.style.display = "none";
+                eredmenyElem.style.color = "#ffd700";
+                eredmenyElem.innerText =
+                    `Gratulálunk! Ön megállt a játékban és nyert: ${osszPontszam.toLocaleString()} Ft`;
+                document.getElementById("ujrainditasDiv").style.display = "block";
+                gombok.forEach(b => b.disabled = true);
+            };
+        }, 1200);
+
     } else {
-        document.getElementById("eredmeny").innerText = `Gratulálok ön nyert!  A nyert összeg: ${osszPontszam.toLocaleString()} Ft`;
-        document.getElementById("pontszam").innerText = "";
+        document.getElementById(`valasz${kivalasztottValasz}`).style.background =
+            "linear-gradient(90deg,#ff4c4c,#b30000)";
+        document.getElementById(`valasz${kerdes.helyesValasz}`).style.background =
+            "linear-gradient(90deg,#2bc36b,#129b4d)";
+        eredmenyElem.style.color = "#ffb6b6";
+        eredmenyElem.innerText = `Helytelen válasz — a helyes válasz: ${kerdes.helyesValasz}. Nem nyertél tovább.`;
+
+        setTimeout(() => {
+            document.getElementById("ujrainditasDiv").style.display = "block";
+        }, 1000);
+
+        segitsegekTiltasa();
+        jatekVege();
     }
 }
-
-
-
-        function segitsegekTiltasa() {
+        function segitsegekTiltasa(){
             document.getElementById("kozonseg").disabled = true;
             document.getElementById("telefon").disabled = true;
             document.getElementById("otven").disabled = true;
             document.getElementById("ujrainditasDiv").style.display = "block";
         }
 
-        function otvenOtven() {
-            if (hasznaltOtvenOtven) {
-                alert("Ez a segítség már fel van használva!");
-                return;
+        function otvenOtven(){
+            if(hasznaltOtvenOtven){ alert("Ez a segítség már fel van használva!"); return; }
+            hasznaltOtvenOtven = true;
+            const btn = document.getElementById("otven");
+            btn.disabled = true;
+            btn.style.textDecoration = "line-through";
+            btn.style.opacity = 0.6;
+
+            const kerdes = randomKerdesek[aktualisKerdesIndex];
+            const helytelen = ["A","B","C","D"].filter(v => v !== kerdes.helyesValasz);
+
+            for(let i=helytelen.length-1;i>0;i--){
+                const j=Math.floor(Math.random()*(i+1));
+                [helytelen[i], helytelen[j]] = [helytelen[j], helytelen[i]];
             }
-            hasznaltOtvenOtven = true;
-        document.getElementById("otven").disabled = true;
-        document.getElementById("otven").style.textDecoration = "line-through";
-        document.getElementById("otven").style.color = "red";
-
-            hasznaltOtvenOtven = true;
-            document.getElementById("otven").disabled = true;
-            const kerdes = kerdesek[aktualisKerdesIndex];
-            const helytelenValaszok = ["A", "B", "C", "D"].filter(valasz => valasz !== kerdes.helyesValasz);
-            const eltavolitandoValaszok = helytelenValaszok.slice(0, 2);
-
-            eltavolitandoValaszok.forEach(valasz => {
-                document.getElementById(`valasz${valasz}`).style.display = "none";
+            const eltavolitando = helytelen.slice(0,2);
+            eltavolitando.forEach(v => {
+                const el = document.getElementById(`valasz${v}`);
+                if(el) el.style.display = "none";
             });
         }
 
-        function kozonsegSegitsege() {
-            if (hasznaltKozonsegSegitseg) {
-                alert("Ez a segítség már fel van használva!");
-                return;
-                
-            }
+        function kozonsegSegitsege(){
+            if(hasznaltKozonsegSegitseg){ alert("Ez a segítség már fel van használva!"); return; }
             hasznaltKozonsegSegitseg = true;
-        document.getElementById("kozonseg").disabled = true;
-        document.getElementById("kozonseg").style.textDecoration = "line-through";
-        document.getElementById("kozonseg").style.color = "red";
-    
-            hasznaltKozonsegSegitseg = true;
-            const kerdes = kerdesek[aktualisKerdesIndex];
+            const btn = document.getElementById("kozonseg");
+            btn.disabled = true;
+            btn.style.textDecoration = "line-through";
+            btn.style.opacity = 0.6;
+
+            const kerdes = randomKerdesek[aktualisKerdesIndex];
             alert(`A közönség szerint a helyes válasz: ${kerdes.helyesValasz}`);
         }
 
-        function telefonSegitsege() {
-            if (hasznaltTelefonSegitseg) {
-                alert("Ez a segítség már fel van használva!");
-                return;
-            }
+        function telefonSegitsege(){
+            if(hasznaltTelefonSegitseg){ alert("Ez a segítség már fel van használva!"); return; }
             hasznaltTelefonSegitseg = true;
-        document.getElementById("telefon").disabled = true;
-        document.getElementById("telefon").style.textDecoration = "line-through";
-        document.getElementById("telefon").style.color = "red";
-  
-            hasznaltTelefonSegitseg = true;
-            const kerdes = kerdesek[aktualisKerdesIndex];
+            const btn = document.getElementById("telefon");
+            btn.disabled = true;
+            btn.style.textDecoration = "line-through";
+            btn.style.opacity = 0.6;
+
+            const kerdes = randomKerdesek[aktualisKerdesIndex];
             alert(`A barát szerint a helyes válasz: ${kerdes.helyesValasz}`);
         }
 
-        function jatekVege() {
-            document.querySelectorAll('.answers button').forEach(gomb => {
-                gomb.disabled = true;
-            });
+        function jatekVege(){
+            document.querySelectorAll('.answers button').forEach(b => b.disabled = true);
+            document.getElementById("ujrainditasDiv").style.display = "block";
+            updatePrizeHighlight();
         }
 
-        function ujrainditas() {
+        function ujrainditas(){
             location.reload();
         }
 
+        buildPrizeList();
         kerdesBetoltese();
-        
     </script>
+    <!-- Modális ablak -->
+<div id="modalOverlay" class="modal-overlay">
+    <div class="modal">
+        <h2>Helyes válasz! 🎉</h2>
+        <p id="modalText">Eddigi nyereményed: 0 Ft</p>
+        <div class="modal-buttons">
+            <button id="continueBtn">Folytatom</button>
+            <button id="stopBtn">Megállok</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
