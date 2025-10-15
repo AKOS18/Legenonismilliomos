@@ -3,282 +3,356 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Legyen Ön is Milliomos</title>
-    <style>
-        :root{
-            --bg1: #0f1720;
-            --bg2: #1f2933;
-            --card: #22272b;
-            --accent: #1e90ff;
-            --gold: #ffd700;
-            --muted: #9aa4ad;
-        }
-        *{box-sizing:border-box}
-        body{
-            margin:0;
-            min-height:100vh;
-            font-family:Inter, Roboto, Arial, sans-serif;
-            background: linear-gradient(135deg,var(--bg1),var(--bg2));
-            color:#eef2f6;
-            display:flex;
-            gap:24px;
-            padding:24px;
-        }
+    <title>Legyen Ön is Milliomos - Javított</title>
+   <style>
+:root{
+    --bg1: #071023;
+    --bg2: #0f1724;
+    --card: rgba(255,255,255,0.03);
+    --panel: rgba(255,255,255,0.025);
+    --accent: #4fb3ff;
+    --accent-2: #1e90ff;
+    --gold: #ffd166;
+    --muted: #9aa4ad;
+    --glass: rgba(255,255,255,0.04);
+    --success: #46d07b;
+    --danger: #ff6b6b;
+    --soft-shadow: 0 8px 30px rgba(2,6,23,0.65);
+    --glass-border: rgba(255,255,255,0.04);
+    --radius: 14px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(30,144,255,0.06), transparent 6%),
+                linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:#eef2f6;
+    display:flex;
+    gap:24px;
+    padding:28px;
+    -webkit-font-smoothing:antialiased;
+    align-items:flex-start;
+}
 
-        /* SIDEBAR (nyeremeny-létra) */
-        .sidebar{
-            width:260px;
-            background: linear-gradient(180deg,#111417, #172026);
-            border-radius:12px;
-            padding:16px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-            flex-shrink:0;
-            display:flex;
-            flex-direction:column;
-            align-items:stretch;
-            height:calc(100vh - 48px);
-            overflow:auto;
-        }
-        .sidebar h2{
-            margin:0 0 12px 0;
-            font-size:16px;
-            color:var(--gold);
-            text-align:center;
-            letter-spacing:0.6px;
-        }
-        .prize-list{
-            list-style:none;
-            padding:0;
-            margin:0;
-            width:100%;
-        }
-        .prize-item{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:10px 12px;
-            border-radius:10px;
-            margin-bottom:8px;
-            background:transparent;
-            color:var(--muted);
-            font-weight:600;
-            transition: all 0.18s ease;
-            border:1px solid rgba(255,255,255,0.02);
-        }
-        .prize-item span.level{
-            font-size:13px;
-            color:#cbd5dd;
-        }
-        .prize-item span.amount{
-            font-size:14px;
-        }
-        .prize-item.active{
-            background: linear-gradient(90deg, rgba(255,215,0,0.12), rgba(30,144,255,0.06));
-            color: #fff;
-            box-shadow: 0 6px 18px rgba(30,144,255,0.06);
-            transform: translateX(-4px);
-            border:1px solid rgba(30,144,255,0.18);
-        }
-        .prize-item.locked{
-            opacity:0.45;
-        }
+/* SIDEBAR */
+.sidebar{
+    width:300px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:var(--radius);
+    padding:18px;
+    box-shadow: var(--soft-shadow);
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    height:calc(100vh - 56px);
+    overflow:auto;
+    border:1px solid var(--glass-border);
+    backdrop-filter: blur(6px) saturate(120%);
+}
+.sidebar h2{
+    margin:0;
+    font-size:14px;
+    color:var(--gold);
+    text-align:center;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    font-weight:700;
+    padding:6px 0;
+    border-bottom:1px dashed rgba(255,255,255,0.03);
+}
 
-        /* MAIN */
-        .main{
-            flex:1 1 auto;
-            max-width:900px;
-            background: linear-gradient(180deg, #1c2226, #23292d);
-            border-radius:12px;
-            padding:22px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            display:flex;
-            flex-direction:column;
-            align-items:stretch;
-            gap:12px;
-        }
-        .header{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:12px;
-        }
-        h1{
-            margin:0;
-            font-size:20px;
-            color:var(--accent);
-            text-transform:uppercase;
-            letter-spacing:0.8px;
-        }
-        .status{
-            color:var(--gold);
-            font-weight:700;
-        }
-        .card{
-            background:var(--card);
-            border-radius:12px;
-            padding:18px;
-            box-shadow: inset 0 -2px 0 rgba(0,0,0,0.4);
-        }
-        .question{
-            font-size:18px;
-            margin:0 0 10px 0;
-            color:#eef6ff;
-            min-height:56px;
-            display:flex;
-            align-items:center;
-        }
-        .answers{
-            display:flex;
-            flex-direction:column;
-            gap:10px;
-        }
-        .answers button{
-            background: linear-gradient(180deg,var(--accent), #0b6fd0);
-            color:white;
-            border: none;
-            padding:12px 14px;
-            border-radius:10px;
-            font-size:15px;
-            cursor:pointer;
-            text-align:left;
-            transition: transform .12s ease, filter .12s ease;
-            display:flex;
-            gap:12px;
-            align-items:center;
-            justify-content:flex-start;
-        }
-        .answers button:hover{ transform: translateY(-3px) }
-        .answers button.disabled{ opacity:0.55; cursor:not-allowed; transform:none }
-        .answers .label{
-            background:rgba(255,255,255,0.06);
-            padding:8px 10px;
-            border-radius:8px;
-            font-weight:800;
-            width:40px;
-            text-align:center;
-        }
-        .lifelines{
-            margin-top:12px;
-            display:flex;
-            gap:8px;
-        }
-        .lifelines button{
-            padding:8px 10px;
-            background:#2b3236;
-            color:#e6eef6;
-            border-radius:8px;
-            border:1px solid rgba(255,255,255,0.03);
-            cursor:pointer;
-        }
-        .info-row{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:12px;
-            margin-top:12px;
-        }
-        .result{
-            font-weight:700;
-            min-height:22px;
-            color:#bfe3b9;
-        }
-        .restart{
-            display:none;
-        }
-        .restart button{
-            background:#ff5f5f;
-            color:white;
-            padding:8px 12px;
-            border-radius:8px;
-            border:none;
-            cursor:pointer;
-        }
+.prize-list{ list-style:none; padding:12px 6px; margin:0; width:100%; display:flex; flex-direction:column; gap:10px; }
 
-        @media (max-width:900px){
-            body{flex-direction:column;padding:12px}
-            .sidebar{width:100%;height: 40%;order:2}
-            .main{order:1;width:100%}
-        }
-        /* --- MODÁL ABLAK STÍLUS --- */
+.prize-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+    color:var(--muted);
+    font-weight:700;
+    transition: all .22s cubic-bezier(.2,.9,.3,1);
+    border:1px solid rgba(255,255,255,0.02);
+    box-shadow: 0 6px 18px rgba(4,8,20,0.45);
+}
+.prize-item .level{ font-size:13px; color: #cbd5dd; display:flex; gap:8px; align-items:center; }
+.prize-item .amount{ font-size:15px; font-variant-numeric: tabular-nums; }
+
+.prize-item.locked{ opacity:0.45; transform: translateX(0); filter:grayscale(.02); }
+.prize-item.active{
+    background: linear-gradient(90deg, rgba(255,215,0,0.12), rgba(30,144,255,0.04));
+    color:white;
+    transform: translateX(-6px);
+    box-shadow: 0 10px 30px rgba(30,144,255,0.08);
+    border:1px solid rgba(30,144,255,0.12);
+}
+
+/* MAIN */
+.main{
+    flex:1 1 auto;
+    max-width:1000px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+    border-radius:var(--radius);
+    padding:26px;
+    box-shadow: var(--soft-shadow);
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    border:1px solid var(--glass-border);
+}
+
+/* Header */
+.header{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
+h1{
+    margin:0;
+    font-size:20px;
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:0.8px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+.header .brand-badge{
+    font-size:12px;
+    color:var(--gold);
+    background: linear-gradient(90deg, rgba(255,215,0,0.08), rgba(30,144,255,0.04));
+    padding:6px 10px;
+    border-radius:999px;
+    font-weight:700;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+.status{
+    color:var(--gold);
+    font-weight:800;
+    background: linear-gradient(90deg, rgba(255,255,255,0.015), transparent);
+    padding:8px 12px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.02);
+    font-size:13px;
+}
+
+/* Card */
+.card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:12px;
+    padding:20px;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.35);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    border:1px solid rgba(255,255,255,0.02);
+}
+
+/* Question */
+.question{
+    font-size:20px;
+    margin:0;
+    color:#eef6ff;
+    min-height:66px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+/* Answers */
+.answers{ display:flex; flex-direction:column; gap:12px; }
+
+.answers button{
+    background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    color:white;
+    border:1px solid rgba(255,255,255,0.04);
+    padding:14px 16px;
+    border-radius:12px;
+    font-size:15px;
+    cursor:pointer;
+    text-align:left;
+    transition: transform .12s cubic-bezier(.2,.9,.3,1), box-shadow .12s ease, background .12s ease;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:flex-start;
+    position:relative;
+    overflow:hidden;
+}
+.answers button:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(6,20,40,0.45);
+    background: linear-gradient(90deg, rgba(30,144,255,0.06), rgba(255,255,255,0.02));
+}
+.answers button.disabled{ opacity:0.55; cursor:not-allowed; transform:none; box-shadow:none; }
+
+.answers .label{
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
+    padding:10px 12px;
+    border-radius:10px;
+    font-weight:900;
+    width:48px;
+    min-width:48px;
+    text-align:center;
+    letter-spacing:0.6px;
+    color:var(--accent-2);
+    font-size:14px;
+    border:1px solid rgba(255,255,255,0.02);
+}
+.answers .text{ flex:1; font-weight:700; color: #e8f5ff; }
+
+/* Correct / wrong visual states (applied inline by JS) */
+.answers button.correct{
+    background: linear-gradient(90deg, rgba(70,208,123,0.12), rgba(46,196,111,0.06));
+    border:1px solid rgba(70,208,123,0.12);
+    box-shadow: 0 10px 30px rgba(46,196,111,0.06);
+}
+.answers button.wrong{
+    background: linear-gradient(90deg, rgba(255,107,107,0.10), rgba(255,80,80,0.04));
+    border:1px solid rgba(255,80,80,0.08);
+    box-shadow: 0 10px 30px rgba(255,80,80,0.04);
+}
+
+/* Lifelines */
+.lifelines{
+    margin-top:6px;
+    display:flex;
+    gap:10px;
+}
+.lifelines button{
+    padding:8px 12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+    color:#e6eef6;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.03);
+    cursor:pointer;
+    font-weight:700;
+    font-size:13px;
+    transition: transform .12s ease, opacity .12s ease;
+}
+.lifelines button:hover{ transform: translateY(-3px); }
+.lifelines button:disabled{ opacity:0.45; text-decoration:line-through; cursor:not-allowed; transform:none; }
+
+/* Info row */
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-top:8px;
+}
+.result{ font-weight:800; min-height:22px; color:var(--muted); }
+.nyeremeny{ color:#cfeeff; font-weight:800; }
+
+/* Restart */
+.restart{ display:none; }
+.restart button{
+    background: linear-gradient(90deg, var(--danger), #ff4b4b);
+    color:white;
+    padding:9px 14px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    font-weight:800;
+}
+
+/* Modal */
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.85));
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 999;
-    animation: fadeIn 0.4s ease;
+    animation: fadeIn 0.28s ease;
+    padding:24px;
 }
-
 .modal {
-    background: #2b2b2b;
-    border: 2px solid #1e90ff;
-    border-radius: 15px;
-    padding: 25px 40px;
+    width: min(680px, 96%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: 16px;
+    padding: 26px 28px;
     color: #f5f5f5;
     text-align: center;
-    box-shadow: 0 0 20px rgba(30, 144, 255, 0.5);
-    animation: popUp 0.3s ease;
+    box-shadow: 0 30px 80px rgba(2,6,23,0.8);
+    border:1px solid rgba(30,144,255,0.08);
+    transform: translateY(-6px);
+}
+.modal h2{ color:var(--gold); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.8px; }
+.modal p{ font-size:1.05rem; margin-bottom:18px; color:#dfefff; white-space:pre-line; }
+.modal-buttons{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+.modal-buttons button{
+    padding:10px 18px; border-radius:10px; border:none; cursor:pointer; font-weight:800; font-size:14px;
+}
+#continueBtn{ background: linear-gradient(90deg, var(--accent), var(--accent-2)); color:#04243d; }
+#stopBtn{ background: linear-gradient(90deg, #ffd166, #ffb14d); color:#1a1110; }
+
+/* small screens */
+@media (max-width:900px){
+    body{flex-direction:column;padding:14px; align-items:stretch}
+    .sidebar{width:100%;height:auto;order:2;border-radius:12px}
+    .main{order:1;width:100%; border-radius:12px}
+    .answers .label{ width:44px; min-width:44px; padding:8px 10px; }
+    h1{ font-size:18px }
 }
 
-.modal h2 {
-    color: #ffd700;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-}
+/* subtle entrance */
+.prize-item, .card, .answers button { will-change: transform, opacity; transition: transform .25s ease, opacity .25s ease; }
 
-.modal p {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
+/* little decorative accent */
+.header::after{
+    content: "";
+    display:block;
+    width:44px;
+    height:4px;
+    border-radius:999px;
+    background: linear-gradient(90deg, rgba(79,179,255,0.18), rgba(255,209,102,0.12));
+    opacity:.9;
+    margin-left:8px;
 }
-
-.modal-buttons {
+/* --- JOBB OLDALI LOGÓ --- */
+.logo-container {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    width: 160px;
+    height: 160px;
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 15px;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+    border-radius: 50%;
+    box-shadow: 0 0 25px rgba(30,144,255,0.3);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.05);
+    z-index: 50;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.logo-container:hover {
+    transform: scale(1.06) rotate(2deg);
+    box-shadow: 0 0 40px rgba(255,215,0,0.3);
+}
+.logo-container img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(30,144,255,0.4));
+    pointer-events: none;
+    user-select: none;
+}
+@media (max-width:900px){
+    .logo-container {
+        position: static;
+        width: 120px;
+        height: 120px;
+        margin: 20px auto 0;
+    }
 }
 
-.modal-buttons button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-}
+</style>
 
-#continueBtn {
-    background: #1e90ff;
-    color: white;
-}
-
-#continueBtn:hover {
-    background: #0d7bcc;
-    transform: scale(1.05);
-}
-
-#stopBtn {
-    background: #ff5f5f;
-    color: white;
-}
-
-#stopBtn:hover {
-    background: #ff4242;
-    transform: scale(1.05);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes popUp {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-    </style>
 </head>
 <body>
     <aside class="sidebar" id="sidebar">
@@ -320,8 +394,20 @@
 
     </main>
 
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal">
+            <h2>Helyes válasz! 🎉</h2>
+            <p id="modalText">Eddigi nyereményed: 0 Ft</p>
+            <div class="modal-buttons">
+                <button id="continueBtn">Folytatom</button>
+                <button id="stopBtn">Megállok</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const kerdesek = [
+       
+         const kerdesek = [
   { kerdes: "Melyik bolygó a Naprendszer legnagyobb bolygója?", valaszok: ["Föld","Mars","Jupiter","Szaturnusz"], helyesValasz: "C" },
   { kerdes: "Ki írta a 'Tüskevár' című regényt?", valaszok: ["Jókai Mór","Molnár Ferenc","Fekete István","Móra Ferenc"], helyesValasz: "C" },
   { kerdes: "Melyik évben kezdődött a második világháború?", valaszok: ["1918","1939","1941","1945"], helyesValasz: "B" },
@@ -426,7 +512,7 @@
   { kerdes: "Mi a kémiai jele az aranynak?", valaszok: ["Au","Ag","Fe","Cu"], helyesValasz: "A" },
   { kerdes: "Melyik országban található a Piramisok völgye?", valaszok: ["India","Egyiptom","Irán","Mexikó"], helyesValasz: "B" },
   { kerdes: "Milyen nyelvet beszélnek Spanyolországban?", valaszok: ["Spanyol","Francia","Portugál","Olasz"], helyesValasz: "A" },
-  { kerdes: "Melyik bolygón található a Szaturnusz gyűrűje?", valaszok: ["Jupiter","Szaturnusz","Uránusz","Neptunusz"], helyesValasz: "B" },
+  { kerdes: "Melyik bolygónak van gyűrűje?", valaszok: ["Jupiter","Szaturnusz","Uránusz","Neptunusz"], helyesValasz: "B" },
   { kerdes: "Mi a fővárosa Hollandiának?", valaszok: ["Amszterdam","Rotterdam","Hága","Utrecht"], helyesValasz: "A" },
   { kerdes: "Mi a fővárosa Belgiumban?", valaszok: ["Antwerpen","Brüsszel","Gent","Liege"], helyesValasz: "B" },
   { kerdes: "Melyik országban található a Niagara-vízesés?", valaszok: ["Kanada","USA","Mindkettő","Mexikó"], helyesValasz: "C" },
@@ -738,7 +824,7 @@
   { kerdes: "Melyik országban található a Victoria-vízesés?", valaszok: ["Zambia","Zimbabwe","Botswana","Dél-Afrika"], helyesValasz: "A" },
   { kerdes: "Mi a neve a Föld legnagyobb óceánjának?", valaszok: ["Csendes-óceán","Atlanti-óceán","Indiai-óceán","Északi-óceán"], helyesValasz: "A" },
   { kerdes: "Melyik bolygón található a Nagy Vörös Folt?", valaszok: ["Jupiter","Mars","Szaturnusz","Merkúr"], helyesValasz: "A" },
-  { kerdes: "Melyik ország zászlajában van piros, fehér és zöld csík?", valaszok: ["Magyarország","Olaszország","Bulgária","Mexikó"], helyesValasz: "A" },
+  { kerdes: "Melyik ország zászlajában van piros, fehér és zöld szín?", valaszok: ["Magyarország","USA","Bulgária","Mexikó"], helyesValasz: "A" },
   { kerdes: "Melyik évben született Albert Einstein?", valaszok: ["1879","1867","1889","1899"], helyesValasz: "A" },
   { kerdes: "Mi a neve a leghosszabb folyónak Afrikában?", valaszok: ["Nílus","Kongó","Zambezi","Niger"], helyesValasz: "A" },
   { kerdes: "Melyik városban található a Szent Péter bazilika?", valaszok: ["Vatikánváros","Róma","Milánó","Firenze"], helyesValasz: "A" },
@@ -881,31 +967,13 @@
 ];
 
 
-
-
-
-
-const kerdesMap = {};
-const duplikaltKerdesek = [];
-
-kerdesek.forEach((k, index) => {
-    const kulcs = k.kerdes.trim();
-    if (kerdesMap[kulcs]) {
-        duplikaltKerdesek.push({ index, kerdes: k.kerdes, valaszok: k.valaszok, elsoIndex: kerdesMap[kulcs] });
-    } else {
-        kerdesMap[kulcs] = index;
-    }
-});
-
-console.log("Duplikált kérdések:", duplikaltKerdesek);
-console.log("Összes kérdés száma:", kerdesek.length);
-console.log("Egyedi kérdések száma:", Object.keys(kerdesMap).length);
-
+       
         const nyeremenyek = [
             5000, 15000, 30000, 50000, 100000, 200000, 300000, 500000,
             800000, 1500000, 3000000, 5000000, 10000000, 20000000, 40000000
         ];
 
+       
         function kever(tomb){
             for(let i=tomb.length-1;i>0;i--){
                 const j = Math.floor(Math.random()*(i+1));
@@ -930,7 +998,6 @@ console.log("Egyedi kérdések száma:", Object.keys(kerdesMap).length);
 
         function buildPrizeList(){
             prizeListElem.innerHTML = "";
-           
             for(let i = nyeremenyek.length - 1; i >= 0; i--){
                 const li = document.createElement("li");
                 li.className = "prize-item locked";
@@ -940,9 +1007,7 @@ console.log("Egyedi kérdések száma:", Object.keys(kerdesMap).length);
             }
         }
 
- 
         function updatePrizeHighlight(){
-
             const items = prizeListElem.querySelectorAll(".prize-item");
             items.forEach(it => {
                 it.classList.remove("active");
@@ -987,90 +1052,20 @@ console.log("Egyedi kérdések száma:", Object.keys(kerdesMap).length);
             updatePrizeHighlight();
         }
 
-     function valaszEllenorzes(kivalasztottValasz) {
-    const kerdes = randomKerdesek[aktualisKerdesIndex];
-    const nyeremeny = nyeremenyek[aktualisKerdesIndex];
-    const gombok = document.querySelectorAll('.answers button');
-    const eredmenyElem = document.getElementById("eredmeny");
-
-
-
-    gombok.forEach(g => g.disabled = true);
-
-    if (kivalasztottValasz === kerdes.helyesValasz) {
- 
-        document.getElementById(`valasz${kivalasztottValasz}`).style.background =
-            "linear-gradient(90deg,#2bc36b,#129b4d)";
-        osszPontszam += nyeremeny;
-        eredmenyElem.style.color = "#bfe3b6";
-        eredmenyElem.innerText = `Helyes! Nyertél: ${nyeremeny.toLocaleString()} Ft`;
-
-        aktualisKerdesIndex++;
-
-        setTimeout(() => {
-       
-            if (aktualisKerdesIndex >= randomKerdesek.length) {
-                eredmenyElem.innerText =
-                    `Gratulálunk! Összesen nyertél: ${osszPontszam.toLocaleString()} Ft`;
-                document.getElementById("ujrainditasDiv").style.display = "block";
-                return;
-            }
-
-  
-            const modal = document.getElementById("modalOverlay");
-            const modalText = document.getElementById("modalText");
-            modalText.innerText =
-                `Eddigi nyereményed: ${osszPontszam.toLocaleString()} Ft\n\nSzeretnéd folytatni a játékot?`;
-            modal.style.display = "flex";
-
-            const continueBtn = document.getElementById("continueBtn");
-            const stopBtn = document.getElementById("stopBtn");
-
-            continueBtn.onclick = () => {
-                modal.style.display = "none";
-
-         
-                gombok.forEach(g => {
-                    g.style.background = "#1e90ff";
-                    g.style.display = "block";
-                    g.disabled = false;
-                });
-
-              
-                kerdesBetoltese();
-            };
-
-            stopBtn.onclick = () => {
-                modal.style.display = "none";
-                eredmenyElem.style.color = "#ffd700";
-                eredmenyElem.innerText =
-                    `Gratulálunk! Ön megállt a játékban és nyert: ${osszPontszam.toLocaleString()} Ft`;
-                document.getElementById("ujrainditasDiv").style.display = "block";
-                gombok.forEach(b => b.disabled = true);
-            };
-        }, 1200);
-
-    } else {
-        document.getElementById(`valasz${kivalasztottValasz}`).style.background =
-            "linear-gradient(90deg,#ff4c4c,#b30000)";
-        document.getElementById(`valasz${kerdes.helyesValasz}`).style.background =
-            "linear-gradient(90deg,#2bc36b,#129b4d)";
-        eredmenyElem.style.color = "#ffb6b6";
-        eredmenyElem.innerText = `Helytelen válasz — a helyes válasz: ${kerdes.helyesValasz}. Nem nyertél tovább.`;
-
-        setTimeout(() => {
-            document.getElementById("ujrainditasDiv").style.display = "block";
-        }, 1000);
-
-        segitsegekTiltasa();
-        jatekVege();
-    }
-}
         function segitsegekTiltasa(){
-            document.getElementById("kozonseg").disabled = true;
-            document.getElementById("telefon").disabled = true;
-            document.getElementById("otven").disabled = true;
+            const k = document.getElementById("kozonseg");
+            const t = document.getElementById("telefon");
+            const o = document.getElementById("otven");
+            if(k) k.disabled = true;
+            if(t) t.disabled = true;
+            if(o) o.disabled = true;
             document.getElementById("ujrainditasDiv").style.display = "block";
+        }
+
+        function jatekVege(){
+            document.querySelectorAll('.answers button').forEach(b => b.disabled = true);
+            document.getElementById("ujrainditasDiv").style.display = "block";
+            updatePrizeHighlight();
         }
 
         function otvenOtven(){
@@ -1119,30 +1114,94 @@ console.log("Egyedi kérdések száma:", Object.keys(kerdesMap).length);
             alert(`A barát szerint a helyes válasz: ${kerdes.helyesValasz}`);
         }
 
-        function jatekVege(){
-            document.querySelectorAll('.answers button').forEach(b => b.disabled = true);
-            document.getElementById("ujrainditasDiv").style.display = "block";
-            updatePrizeHighlight();
-        }
-
         function ujrainditas(){
             location.reload();
+        }
+
+   
+        function valaszEllenorzes(kivalasztottValasz) {
+            const kerdes = randomKerdesek[aktualisKerdesIndex];
+            const nyeremeny = nyeremenyek[aktualisKerdesIndex];
+            const gombok = document.querySelectorAll('.answers button');
+            const eredmenyElem = document.getElementById("eredmeny");
+
+            gombok.forEach(g => g.disabled = true);
+
+            if (kivalasztottValasz === kerdes.helyesValasz) {
+        
+                const el = document.getElementById(`valasz${kivalasztottValasz}`);
+                if(el) el.style.background = "linear-gradient(90deg,#2bc36b,#129b4d)";
+                osszPontszam += nyeremeny;
+                eredmenyElem.style.color = "#bfe3b6";
+                eredmenyElem.innerText = `Helyes! Nyertél: ${nyeremeny.toLocaleString()} Ft`;
+
+                aktualisKerdesIndex++;
+
+                setTimeout(() => {
+                  
+                    if (aktualisKerdesIndex >= nyeremenyek.length) {
+                        eredmenyElem.style.color = "#ffd700";
+                        eredmenyElem.innerText = `🎉 Gratulálunk! Megnyerted a főnyereményt: ${osszPontszam.toLocaleString()} Ft!`;
+                        segitsegekTiltasa();
+                        jatekVege();
+                        return;
+                    }
+
+                  
+                    const modal = document.getElementById("modalOverlay");
+                    const modalText = document.getElementById("modalText");
+                    if(modal && modalText){
+                        modalText.innerText = `Eddigi nyereményed: ${osszPontszam.toLocaleString()} Ft\n\nSzeretnéd folytatni a játékot?`;
+                        modal.style.display = "flex";
+
+                        const continueBtn = document.getElementById("continueBtn");
+                        const stopBtn = document.getElementById("stopBtn");
+
+                        continueBtn.onclick = () => {
+                            modal.style.display = "none";
+                            gombok.forEach(g => {
+                                g.style.background = "";
+                                g.style.display = "block";
+                                g.disabled = false;
+                            });
+                            kerdesBetoltese();
+                        };
+
+                        stopBtn.onclick = () => {
+                            modal.style.display = "none";
+                            eredmenyElem.style.color = "#ffd700";
+                            eredmenyElem.innerText = `Gratulálunk! Ön megállt a játékban és nyert: ${osszPontszam.toLocaleString()} Ft`;
+                            document.getElementById("ujrainditasDiv").style.display = "block";
+                            gombok.forEach(b => b.disabled = true);
+                        };
+                    } else {
+                      
+                        kerdesBetoltese();
+                    }
+                }, 800);
+
+            } else {
+            
+                const elWrong = document.getElementById(`valasz${kivalasztottValasz}`);
+                if(elWrong) elWrong.style.background = "linear-gradient(90deg,#ff4c4c,#b30000)";
+                const elCorrect = document.getElementById(`valasz${kerdes.helyesValasz}`);
+                if(elCorrect) elCorrect.style.background = "linear-gradient(90deg,#2bc36b,#129b4d)";
+
+                eredmenyElem.style.color = "#ffb6b6";
+                eredmenyElem.innerText = `Helytelen válasz — a helyes válasz: ${kerdes.helyesValasz}. Nem nyertél tovább.`;
+
+                setTimeout(() => {
+                    document.getElementById("ujrainditasDiv").style.display = "block";
+                }, 1000);
+
+                segitsegekTiltasa();
+                jatekVege();
+            }
         }
 
         buildPrizeList();
         kerdesBetoltese();
     </script>
-    <!-- Modális ablak -->
-<div id="modalOverlay" class="modal-overlay">
-    <div class="modal">
-        <h2>Helyes válasz! 🎉</h2>
-        <p id="modalText">Eddigi nyereményed: 0 Ft</p>
-        <div class="modal-buttons">
-            <button id="continueBtn">Folytatom</button>
-            <button id="stopBtn">Megállok</button>
-        </div>
-    </div>
-</div>
-
+    
 </body>
 </html>
